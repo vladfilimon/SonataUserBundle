@@ -1,5 +1,5 @@
 {
-    "name": "sonata-project/user-bundle",
+    "name": "bitfriends/sonata-user-bundle",
     "type": "symfony-bundle",
     "description": "Symfony SonataUserBundle",
     "keywords": ["user", "sonata", "google authenticator"],
