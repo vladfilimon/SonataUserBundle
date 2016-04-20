@@ -29,22 +29,22 @@ class SecurityRolesTypeTest extends TypeTestCase
     protected function getExtensions()
     {
         $this->roleBuilder = $roleBuilder = $this->getMockBuilder('Sonata\UserBundle\Security\EditableRolesBuilder')
-          ->disableOriginalConstructor()
-          ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->roleBuilder->expects($this->any())->method('getRoles')->will($this->returnValue(array(
-          0 => array(
-            'ROLE_FOO'   => 'ROLE_FOO',
-            'ROLE_USER'  => 'ROLE_USER',
-            'ROLE_ADMIN' => 'ROLE_ADMIN: ROLE_USER',
-          ),
-          1 => array(),
-        )));
+        $this->roleBuilder
+            ->expects($this->any())
+            ->method('getRoles')
+            ->will($this->returnValue(array(array(
+                'ROLE_FOO'   => 'ROLE_FOO',
+                'ROLE_USER'  => 'ROLE_USER',
+                'ROLE_ADMIN' => 'ROLE_ADMIN: ROLE_USER',
+            ), array())));
 
         $childType = new SecurityRolesType($this->roleBuilder);
 
         return array(new PreloadedExtension(array(
-          $childType->getName() => $childType,
+            SecurityRolesType::class => $childType,
         ), array()));
     }
 
@@ -53,40 +53,21 @@ class SecurityRolesTypeTest extends TypeTestCase
         $type = new SecurityRolesType($this->roleBuilder);
 
         $optionResolver = new OptionsResolver();
-        $type->setDefaultOptions($optionResolver);
+        $type->configureOptions($optionResolver);
 
         $options = $optionResolver->resolve();
         $this->assertCount(3, $options['choices']);
     }
 
-    public function testGetName()
-    {
-        $type = new SecurityRolesType($this->roleBuilder);
-        $this->assertEquals('sonata_security_roles', $type->getName());
-    }
-
     public function testGetParent()
     {
         $type = new SecurityRolesType($this->roleBuilder);
-        $this->assertEquals(
-            method_exists('Symfony\Component\Form\FormTypeInterface', 'setDefaultOptions') ?
-                'choice' :
-                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
-            $type->getParent()
-        );
-    }
-
-    private function getSecurityRolesTypeName()
-    {
-        return
-            method_exists('Symfony\Component\Form\FormTypeInterface', 'setDefaultOptions') ?
-                'sonata_security_roles' :
-                'Sonata\UserBundle\Form\Type\SecurityRolesType';
+        $this->assertEquals('Symfony\Component\Form\Extension\Core\Type\ChoiceType', $type->getParent());
     }
 
     public function testSubmitValidData()
     {
-        $form = $this->factory->create($this->getSecurityRolesTypeName(), null, array(
+        $form = $this->factory->create(SecurityRolesType::class, null, array(
             'multiple' => true,
             'expanded' => true,
             'required' => false,
@@ -101,7 +82,7 @@ class SecurityRolesTypeTest extends TypeTestCase
 
     public function testSubmitInvalidData()
     {
-        $form = $this->factory->create($this->getSecurityRolesTypeName(), null, array(
+        $form = $this->factory->create(SecurityRolesType::class, null, array(
             'multiple' => true,
             'expanded' => true,
             'required' => false,
@@ -117,7 +98,7 @@ class SecurityRolesTypeTest extends TypeTestCase
     {
         $originalRoles = array('ROLE_SUPER_ADMIN', 'ROLE_USER');
 
-        $form = $this->factory->create($this->getSecurityRolesTypeName(), $originalRoles, array(
+        $form = $this->factory->create(SecurityRolesType::class, $originalRoles, array(
             'multiple' => true,
             'expanded' => true,
             'required' => false,
@@ -126,7 +107,9 @@ class SecurityRolesTypeTest extends TypeTestCase
         // we keep hidden ROLE_SUPER_ADMIN and delete available ROLE_USER
         $form->submit(array(0 => 'ROLE_ADMIN'));
 
+        $this->assertNull($form->getTransformationFailure());
         $this->assertTrue($form->isSynchronized());
+
         $this->assertCount(2, $form->getData());
         $this->assertContains('ROLE_SUPER_ADMIN', $form->getData());
     }

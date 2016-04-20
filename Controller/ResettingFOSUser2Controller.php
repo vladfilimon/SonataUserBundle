@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Sonata package.
  *
@@ -19,6 +18,6 @@ use FOS\UserBundle\Controller\ResettingController;
  *
  * @author Hugo Briand <briand@ekino.com>
  */
-class ResettingFOSUser1Controller extends ResettingController
+class ResettingFOSUser2Controller extends ResettingController
 {
 }
