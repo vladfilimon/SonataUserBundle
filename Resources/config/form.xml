@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- profile form -->
         <service id="sonata.user.profile.form" class="Symfony\Component\Form\Form">
@@ -30,9 +27,7 @@
         <service id="sonata.user.form.gender_list" class="Sonata\UserBundle\Form\Type\UserGenderListType">
             <argument>%fos_user.model.user.class%</argument>
             <argument>getGenderList</argument>
-            <argument>Sonata\UserBundle\Form\Type\UserGenderListType</argument>
-            <argument>true</argument> <!-- flip the key to match Symfony2.8+ signature -->
-
+            <argument>sonata_user_gender</argument>
             <tag name="form.type" alias="sonata_user_gender"/>
         </service>
 
