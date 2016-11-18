@@ -1,3 +1,9 @@
+This is a fork of SonataUserBundle created for integration in Symfony3 until they release a stable version.
+
+BitFriends/SonataUserBundle works well, less the Recover Password functionality, which was fixed in this fork.
+
+In theory, BitFriends/SonataUserBundle should work with the FosUserBundle v2.0.0-alpha1, but I was unable to satisfy the dependencies.
+
 # Sonata User Bundle
 
 Symfony SonataUserBundle
