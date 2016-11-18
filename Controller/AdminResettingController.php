@@ -158,4 +158,14 @@ class AdminResettingController extends ResettingController
             'admin_pool' => $this->container->get('sonata.admin.pool'),
         ));
     }
+
+    protected function getObfuscatedEmail(UserInterface $user)
+    {
+        $email = $user->getEmail();
+        if (false !== $pos = strpos($email, '@')) {
+            $email = '...' . substr($email, $pos);
+        }
+
+        return $email;
+    }
 }
